@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toddding.mapper.BusReturnMapper">
+  <resultMap id="BaseResultMap" type="com.toddding.domain.vo.BusReturnVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="num" jdbcType="VARCHAR" property="num" />
+    <result column="rent_id" jdbcType="INTEGER" property="rentId" />
+    <result column="rent_days" javaType="INTEGER" property="rentDays"/>
+    <result column="return_time" jdbcType="VARCHAR" property="returnTime" />
+    <result column="rent_price" jdbcType="INTEGER" property="rentPrice" />
+    <result column="pay_money" jdbcType="INTEGER" property="payMoney" />
+    <result column="problem" jdbcType="VARCHAR" property="problem" />
+    <result column="total_money" jdbcType="INTEGER" property="totalMoney" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, num, rent_id,rent_days, return_time, rent_price, pay_money, problem, total_money, user_id,
+    create_time
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bus_return
+    <where>
+      <if test="num != null and num != ''">
+        num like concat('%',#{num},'%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insert">
+    insert into bus_return
+      (num, rent_id,rent_days, return_time, rent_price, pay_money, problem, total_money, user_id)
+    values
+      (#{num}, #{rentId},#{rentDays}, #{returnTime}, #{rentPrice}, #{payMoney}, #{problem},#{totalMoney}, #{userId})
+  </insert>
+
+</mapper>

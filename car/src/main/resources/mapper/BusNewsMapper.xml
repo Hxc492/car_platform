@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toddding.mapper.BusNewsMapper">
+  <resultMap id="BaseResultMap" type="com.toddding.domain.vo.BusNewsVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, content, user_id, create_time
+  </sql>
+
+    <select id="selectList" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from bus_news
+      <where>
+        <if test="title != null and title != ''">
+          and title like concat('%',#{title},'%')
+        </if>
+        <if test="content != null and content != ''">
+          and content like concat('%',#{content},'%')
+        </if>
+      </where>
+    </select>
+
+  <delete id="delete">
+    delete from bus_news
+    where id = #{id}
+  </delete>
+  <insert id="insert">
+    insert into bus_news 
+      (title, content, user_id)
+    values 
+      (#{title}, #{content}, #{userId})
+  </insert>
+
+  <update id="update">
+    update bus_news
+    set title = #{title},
+      content = #{content},
+      user_id = #{userId}
+    where id = #{id}
+  </update>
+</mapper>

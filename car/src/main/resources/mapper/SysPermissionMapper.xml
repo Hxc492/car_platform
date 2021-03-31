@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toddding.mapper.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.toddding.domain.vo.SysPermissionVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="href" jdbcType="VARCHAR" property="href" />
+    <result column="spread" jdbcType="BIT" property="spread" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, icon, href, spread, `type`, tag, sort, parent_id
+  </sql>
+
+  <select id="selectUserPermission" resultMap="BaseResultMap">
+    select
+      DISTINCT <include refid="Base_Column_List" />
+    from
+      sys_permission sp,sys_role_per_rel srp,sys_user_role_rel sur
+    where
+      sur.user_id = #{userId}
+      and sur.role_id = srp.role_id
+      and srp.per_id = sp.id
+--    查询的类型为菜单，不查询按钮
+      <if test="type != null">
+        and sp.type = #{type}
+      </if>
+    order by
+      sp.sort desc
+  </select>
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      sys_permission
+    <where>
+      <if test="title != null and title != ''">
+        title like concat('%,'#{title},'%')
+      </if>
+    </where>
+  </select>
+  <select id="selectAllChildId" resultType="java.lang.Integer">
+    select id from sys_permission
+    where parent_id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </select>
+  <delete id="batchDelete">
+    delete from sys_permission
+    where id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteRel">
+    delete from sys_role_per_rel
+    where per_id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <insert id="insert">
+    insert into sys_permission 
+      (title, icon, href, spread, `type`, tag, sort, parent_id)
+    values
+      (#{title}, #{icon}, #{href}, #{spread}, #{type}, #{tag}, #{sort}, #{parentId})
+  </insert>
+
+  <update id="update">
+     update sys_permission
+    set title = #{title},
+      icon = #{icon},
+      href = #{href},
+      spread = #{spread},
+      `type` = #{type},
+      tag = #{tag},
+      sort = #{sort},
+      parent_id = #{parentId}
+    where id = #{id}
+  </update>
+</mapper>

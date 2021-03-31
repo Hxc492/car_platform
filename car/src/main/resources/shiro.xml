@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 1.创建认证器 鉴权器 -->
+    <bean id="authortion" class="com.toddding.shiro.MyAuthortion" />
+
+    <!-- 2.权限管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="authortion"></property>
+    </bean>
+    <!-- 3.创建shiro进行拦截的filter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 注入安全管理器 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 未登陆 跳转的页面 -->
+        <property name="loginUrl" value="/index.jsp"></property>
+        <!-- 过滤器规则 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 配置不用认证的资源 -->
+                /resources/**=anon
+                /index.jsp=anon
+                /sysuser/login.do=anon
+                <!-- 需要认证的资源 -->
+                /**=authc
+            </value>
+        </property>
+    </bean>
+</beans>

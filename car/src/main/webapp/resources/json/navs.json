@@ -1,0 +1,71 @@
+{
+	"contentManagement": [
+		{
+			"title": "租赁管理",
+			"icon": "icon-text",
+			"href": "page/news/newsList.html",
+			"spread": true,
+			"children": [
+				{
+					"title": "客户管理",
+					"icon": "&#xe613;",
+					"href": "customer/list.do",
+					"spread": false,
+					"target": "_self"
+				},
+				{
+					"title": "汽车管理",
+					"icon": "&#xe610;",
+					"href": "car/list.do",
+					"spread": false,
+					"target": "_self"
+				},
+				{
+					"title": "出租记录",
+					"icon": "&#xe63c;",
+					"href": "rent/list.do",
+					"spread": false,
+					"target": "_self"
+				},
+				{
+					"title": "还车记录",
+					"icon": "&#xe62a;",
+					"href": "return/list.do",
+					"spread": false,
+					"target": "_self"
+				}
+			]
+		},
+		{
+			"title": "系统管理",
+			"icon": "&#xe634;",
+			"href": "page/img/images.html",
+			"spread": true,
+			"children": [
+				{
+					"title": "用户管理",
+					"icon": "&#xe770;",
+					"href": "user/list.do",
+					"spread": false,
+					"target": "_self"
+				},
+				{
+					"title": "角色管理",
+					"icon": "&#xe612;",
+					"href": "role/list.do",
+					"spread": false,
+					"target": "_self"
+				},
+				{
+					"title": "权限管理",
+					"icon": "&#xe672;",
+					"href": "perm/list.do",
+					"spread": false,
+					"target": "_self"
+				}
+			]
+		}
+	]
+}
+
+

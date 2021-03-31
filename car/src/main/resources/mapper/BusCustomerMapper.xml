@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toddding.mapper.BusCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.toddding.domain.vo.BusCustomerVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="driving_license" jdbcType="VARCHAR" property="drivingLicense" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `name`, phone, province, city, address, driving_license, id_card, sex, state, create_time, update_time
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bus_customer
+    <where>
+      <if test="name != null and name != ''">
+        and name like concat('%',#{name},'%')
+      </if>
+      <if test="phone != null and phone != ''">
+        and phone = #{phone}
+      </if>
+      <if test="state != null and state != ''">
+        and state=#{state}
+      </if>
+    </where>
+  </select>
+    <select id="selectByIdCardOrPhoneOrDrivingLicense" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from bus_customer
+      <where>
+        <if test="idCard != null and idCard != ''">
+          and id_card =#{idCard}
+        </if>
+        <if test="phone != null and phone != ''">
+          and phone =#{phone}
+        </if>
+        <if test="drivingLicense != null and drivingLicense != ''">
+          and driving_license =#{drivingLicense}
+        </if>
+      </where>
+    </select>
+
+  <insert id="insert">
+    insert into
+            bus_customer (`name`, phone, province, city, address, driving_license, id_card, sex ,state)
+        value
+            (#{name}, #{phone}, #{province} ,#{city}, #{address}, #{drivingLicense}, #{idCard}, #{sex} ,#{state})
+  </insert>
+
+  <insert id="batchInsert">
+    insert into
+    bus_customer (`name`, phone, province, city, address, driving_license, id_card, sex ,state)
+    values
+    <foreach collection="customers"  item="customer" separator=",">
+      (#{customer.name}, #{customer.phone}, #{customer.province}, #{customer.city}, #{customer.address}, #{customer.drivingLicense}, #{customer.idCard}, #{customer.sex}, #{customer.state})
+    </foreach>
+  </insert>
+
+  <update id="update">
+    update bus_customer
+    set `name` = #{name},
+      phone = #{phone},
+      province = #{province},
+      city = #{city},
+      address = #{address},
+      driving_license = #{drivingLicense},
+      id_card = #{idCard},
+      sex = #{sex},
+      state = #{state}
+    where id = #{id}
+  </update>
+  <update id="updateStateById">
+    update bus_customer
+    set state = 2
+  where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toddding.mapper.BusRentMapper">
+  <resultMap id="BaseResultMap" type="com.toddding.domain.vo.BusRentVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="num" jdbcType="VARCHAR" property="num" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="rent_price" jdbcType="INTEGER" property="rentPrice" />
+    <result column="deposit" jdbcType="INTEGER" property="deposit" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, num, `type`, rent_price, deposit, `name`, id_card, begin_time, end_time, flag, 
+    user_id, create_time, update_time
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bus_rent
+    <where>
+      <if test="num != null and num != ''">
+        and num like concat('%',#{num},'%')
+      </if>
+      <if test="name != null and name != ''">
+        and `name` like concat('%',#{name},'%')
+      </if>
+      <if test="flag != null">
+        and flag = #{flag}
+      </if>
+      <if test="minBeginTime != null">
+        and begin_time >= #{minBeginTime}
+      </if>
+      <if test="maxBeginTime != null">
+        and #{maxBeginTime} >= begin_time
+      </if>
+    </where>
+  </select>
+  <select id="selectOneByNum" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bus_rent
+    where num = #{num}
+  </select>
+
+  <insert id="insert">
+    insert into bus_rent
+      (num, `type`, rent_price, deposit, `name`, id_card, begin_time, end_time, user_id)
+    value
+      (#{num}, #{type}, #{rentPrice}, #{deposit}, #{name}, #{idCard}, #{beginTime}, #{endTime}, #{userId})
+  </insert>
+
+    <update id="updateRentInfo">
+      update bus_rent
+      set flag = #{flag},end_time = #{returnTime}
+      where num = #{num} and flag = #{oldFlag}
+    </update>
+</mapper>
